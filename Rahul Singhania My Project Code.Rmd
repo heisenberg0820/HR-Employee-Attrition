@@ -1,0 +1,365 @@
+---
+COLLEGE/COMPANY: Birla Institute Of Technology Mesra
+EMAIL: rahulsinghania0820@gmail.com
+NAME: Rahul Singhania
+Project Title: Analysis of IBM HR Employee Attrition
+output:
+  word_document: default
+  html_notebook: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1. Introduction
+
+This dataset deals with a certain office of IBM, and has all the relevant data about them. This survery was conducted by the HR department of the organization.
+
+## 2. Overview of study 
+
+The reason behind conducting this study is to gain insights about the reason why employees are unhappy with their job, and are getting more and more depressed about their work life.
+
+## 3. Overview of Data
+
+## 3.1 Reading the dataset and visualizing its length and breadth
+```{r}
+employees.df <-read.csv(paste("WA_Fn-UseC_-HR-Employee-Attrition.csv",sep=""))
+View(employees.df)
+attach(employees.df)
+nrow(employees.df)
+ncol(employees.df)
+```
+## 3.2Descriptive statistics for each variable
+```{r}
+library(psych)
+describe(employees.df)[,c(1:5)]
+```
+Inspect the datatypes
+```{r}
+str(employees.df)
+```
+## 3.3 One way contigency tables for categorical variables : 
+
+Attrition
+```{r}
+table(Attrition)
+```
+
+Business Travel
+```{r}
+table(BusinessTravel)
+```
+Department
+```{r}
+table(Department)
+```
+Education
+```{r}
+table(Education)
+```
+Eduaction Field
+```{r}
+table(EducationField)
+```
+Enviornment Satisfaction
+```{r}
+table(EnvironmentSatisfaction)
+```
+Gender
+```{r}
+table(Gender)
+```
+Job Involvement
+```{r}
+table(JobInvolvement)
+```
+Job Level
+```{r}
+table(JobLevel)
+```
+Job Role
+```{r}
+table(JobRole)
+```
+Job Satisfaction
+```{r}
+table(JobSatisfaction)
+```
+Marital Status
+```{r}
+table(MaritalStatus)
+```
+Overtime
+```{r}
+table(OverTime)
+```
+Performance Rating
+```{r}
+table(PerformanceRating)
+```
+Relationship Satisfaction
+```{r}
+table(RelationshipSatisfaction)
+```
+Stock Option Level
+```{r}
+table(StockOptionLevel)
+```
+Work-life balance
+```{r}
+table(WorkLifeBalance)
+```
+
+## 3.4 Two way contigency tables:
+
+Since there are 17 categorical variables in the dataset, it is humanly impossible to write the code for every 17C2 = 136 combinations. So I will try and list the most important ones from the 136 combinations.
+
+Education and Education Field
+```{r}
+xtabs(~Education+EducationField, data=employees.df)
+```
+Department and Education Field
+```{r}
+xtabs(~Department+EducationField, data=employees.df)
+```
+Department and Gender
+```{r}
+xtabs(~Gender+Department, data=employees.df)
+```
+Job level and job involvement
+```{r}
+xtabs(~JobLevel+JobInvolvement, data=employees.df)
+```
+Work life balance and enviornment satisfaction
+```{r}
+xtabs(~WorkLifeBalance+EnvironmentSatisfaction, data=employees.df)
+```
+Job Satisfaction and Performance Rating
+```{r}
+xtabs(~JobSatisfaction+PerformanceRating, data=employees.df)
+```
+Overtime and Performance Rating
+```{r}
+xtabs(~OverTime+PerformanceRating, data=employees.df)
+```
+
+## 4. Review the distribution of Daily Rate
+
+```{r}
+library(lattice)
+histogram(~DailyRate, data = employees.df,
+main = "Distribution of Daily Rate", xlab="Daily Rate", col='grey' )
+```
+Comparison of Daily Rate with the given variables
+
+```{r}
+aggregate(cbind(DailyRate,YearsAtCompany,MonthlyIncome) ~ Gender,
+data = employees.df, mean)
+```
+```{r}
+library(car)
+#Distribution of Monthly Income and Years at Company
+scatterplot(MonthlyIncome~YearsAtCompany,data=employees.df,main="Distribution of monthly income with work experience",ylab="Monthly Income",xlab = "Years at company")
+```
+```{r}
+#Distribution of Monthly Income and Years at Company
+boxplot(MonthlyIncome~YearsAtCompany,data=employees.df,main="Distribution of monthly income with work experience",ylab="Monthly Income",xlab = "Years at company")
+```
+
+## 5. Comparison of Monthly Income and Job Satisfaction
+
+```{r}
+#Distribution of Monthly Income and Job Satisfaction
+scatterplot(MonthlyIncome~JobSatisfaction,data=employees.df,main="Distribution of monthly income with job satisfaction",ylab="Monthly Income",xlab = "Job Satisfaction")
+```
+```{r}
+#Distribution of Monthly Income and Job Satisfaction
+boxplot(MonthlyIncome~JobSatisfaction,data=employees.df,main="Distribution of monthly income with job satisfaction",ylab="Monthly Income",xlab = "Job Satisfaction")
+```
+
+## 6. Comparison of Percent Salary Hike and Job Satisfaction
+
+```{r}
+#Distribution of percent sa;ary hike and job satisfaction
+scatterplot(PercentSalaryHike~JobSatisfaction,data=employees.df,main="Distribution of percent salary hike with job satisfaction",ylab="Percent Salary Hike",xlab = "Job Satisfaction")
+```
+```{r}
+#Distribution of percent sa;ary hike and job satisfaction
+boxplot(PercentSalaryHike~JobSatisfaction,data=employees.df,main="Distribution of percent salary hike with job satisfaction",ylab="Percent Salary Hike",xlab = "Job Satisfaction")
+```
+Review the distribution of percent salary hike
+```{r}
+histogram(~PercentSalaryHike, data = employees.df,
+main = "Distribution of Daily Rate", xlab="Daily Rate", col='grey' )
+```
+
+## 7. Comparison of Distance From Home and Enviornment Satisfaction
+
+```{r}
+#Distribution of Distance From Home and Enviornment Satisfaction
+scatterplot(DistanceFromHome~EnvironmentSatisfaction,data=employees.df,main="Distribution of distance from home with enviornment satisfaction",ylab="Distance from home",xlab = "Enviornment Satisfaction")
+```
+```{r}
+#Distribution of Distance From Home and Enviornment Satisfaction
+boxplot(DistanceFromHome~EnvironmentSatisfaction,data=employees.df,main="Distribution of distance from home with enviornment satisfaction",ylab="Distance from home",xlab = "Enviornment Satisfaction")
+```
+## 8. Review the distribution of Distance From Home
+```{r}
+histogram(~DistanceFromHome, data = employees.df,
+main = "Distribution of Distance From Home", xlab="Distance From Home", col='grey' )
+```
+## 9. Corrogram and Correlation Matrix : 
+```{r}
+library(corrplot)
+colnames(employees.df)
+dataColumns <-employees.df[,c("ï..Age","DailyRate","DistanceFromHome","Education","EmployeeCount","EnvironmentSatisfaction","HourlyRate","JobInvolvement","JobLevel","JobSatisfaction","MonthlyIncome","MonthlyRate","NumCompaniesWorked","PercentSalaryHike","PerformanceRating","RelationshipSatisfaction","StandardHours","StockOptionLevel","TotalWorkingYears","TrainingTimesLastYear","WorkLifeBalance","YearsAtCompany","YearsInCurrentRole","YearsSinceLastPromotion","YearsWithCurrManager")]
+```
+
+Correlation Matrix :
+```{r}
+res <- cor(dataColumns)
+round(res, 2)
+```
+
+Corrogram :
+```{r}
+N <- cor(dataColumns)
+corrplot(N, method="circle")
+```
+Scatterplot Matrix :
+```{r}
+pairs(dataColumns[1:6])
+```
+```{r}
+pairs(dataColumns[7:12])
+```
+```{r}
+pairs(dataColumns[13:18])
+```
+```{r}
+pairs(dataColumns[19:25])
+```
+
+## 10. What variables does Attrition is related to  : 
+
+```{r}
+##Attrition VS How frequently an employee goes to business travel
+library(ggplot2)
+ggplot(employees.df,aes(BusinessTravel,fill=Attrition))+geom_bar(position=position_dodge())+labs(x="Travel Frequency",y="Count",title="Attrition Vs Business Travel")
+table_travel<-table(employees.df$BusinessTravel, employees.df$Attrition)
+chisq.test(table_travel)
+#The barplot shows that employees who travel rarely do not frequently quit the job. Thus, attrition is dependent on business travel, and the chi square test proves this.
+```
+
+```{r}
+#Attrition VS Distance from home
+t.test(DistanceFromHome~Attrition, data=employees.df)
+#As the p-value is less than alpha(0.05), the attrition of employee depends on distance from home.
+```
+```{r}
+#Attrition VS Job Level
+t.test(JobLevel~Attrition, data=employees.df)
+#As p-value is less than alpha, attrition depends on job level.
+```
+```{r}
+#Attrition VS Job Role
+table_role<-table(employees.df$JobRole, employees.df$Attrition)
+chisq.test(table_role)
+#As p-value is less than alpha, attrition depends on job role.
+```
+```{r}
+#Attrition VS Job Satisfaction
+table_job_sat<-table(employees.df$JobSatisfaction, employees.df$Attrition)
+chisq.test(table_job_sat)
+#As p-value is less than alpha, attrition depends on job satisfaction of employees.
+```
+So Attrition depends on :
+Business Travel
+Distance From Home
+Job Level
+Job Role
+Job Satisfaction
+
+## 11. Regression Analysis : 
+
+By examining the attributes of the dataset, one can observe that some of them are not informative, like 'Over18'. So we drop them off the dataset.
+
+
+```{r}
+employees.df = employees.df[ , !(names(employees.df) %in% c('Over18', 'EmployeeCount', 'StandardHours'))]
+```
+
+Look at the class type of each column and change it if required.
+
+```{r}
+t(sapply(employees.df, class))
+```
+
+As it can be seen from the above output, some columns should have a class of type 'factor', while they are assigned 'integer' class type. In the next code we change those class types.
+
+```{r}
+factor.col = c("Attrition", "BusinessTravel", "Department", "DistanceFromHome",
+               "Education", "EducationField", "EnvironmentSatisfaction", "Gender",
+               "JobInvolvement", "JobLevel", "JobRole", "JobSatisfaction", "MaritalStatus",
+               "OverTime", "PerformanceRating", "RelationshipSatisfaction", "StockOptionLevel", "WorkLifeBalance")
+
+employees.df[factor.col] = lapply(employees.df[factor.col], factor)
+```
+
+```{r}
+t(sapply(employees.df, class))
+```
+
+Checking for missing values :
+```{r}
+t(apply(is.na(employees.df), 2, sum))
+```
+
+Checking for null values : 
+```{r}
+t(apply(is.na(employees.df), 2, is.null))
+```
+Performing logistic regression on the data, in order to get more insight about the relation between the response variable which is 'Attrition', and predictor variables.
+```{r}
+logit.fit <- glm(Attrition ~.-1, family = binomial(link = 'logit'), data = employees.df)
+summary(logit.fit)
+```
+
+
+By looking at the p-values, one can see that there is a meaningful relation between 'Attrition' and some predictor variables. Those predictore variables are give in the following,
+
+['Age', 'DistanceFromHome', 'EnvironmentSatisfaction', 'Gender', 'JobInvolvement', 'JobRole', 'JobSatisfaction', 'MaritalStatus', 'NumCompaniesWorked', 'OverTime', 'RelationshipSatisfaction', 'TotalWorkingYears', 'TrainingTimesLastYear', 'WorkLifeBalance', 'YearsAtCompany', 'YearsInCurrentRole', 'YearsSinceLastPromotion', 'YearsWithCurrManager']
+
+We choose the above variables and perform another logistic regression analysis just using them.
+
+```{r}
+regit.selected.cols = c('Attrition', 'ï..Age', 'DistanceFromHome', 'EnvironmentSatisfaction', 'Gender', 'JobInvolvement', 'JobRole', 'JobSatisfaction', 'MaritalStatus', 'NumCompaniesWorked', 'OverTime', 'RelationshipSatisfaction', 'TotalWorkingYears', 'TrainingTimesLastYear', 'WorkLifeBalance', 'YearsAtCompany', 'YearsInCurrentRole', 'YearsSinceLastPromotion', 'YearsWithCurrManager')
+data = employees.df[,regit.selected.cols]
+regit.fit <- glm(Attrition ~.-1, family = binomial(link = 'logit'), data = data)
+summary(regit.fit)
+```
+
+## 12.Final analysis based on regression
+
+Predictor variables which increases the  process of employees' attrition :
+
+Distance From Home
+Job Role Human Resources
+Job Role Laboratory Technician
+Job Role Sales Executive
+Job Role Sales Representative
+Marital Status Single
+OverTime Yes
+
+So to conclude, the above mentioned factors have a destroying effect on employees.
+The organization can take the following steps in order to improve working conditions, and making sure the employees do not depressed at the job :
+
+1. Since the distance between an employee's home and the office is not in the hands of the organization, one cannot counter this factor.
+
+2. The organization can make sure that certain job roles(mentioned above) becomes more lucrative and less depressing.
+
+3. Organizations cannot have any control over the maritial status of the employee, and selecting only those employees who are married is not fair policy.
+
+4. The organization should avoid making their employees work overtime, especially for longer durations.
